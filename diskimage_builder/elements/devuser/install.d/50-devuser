@@ -10,7 +10,7 @@ user_shell_args=
 if [ -n "${DIB_DEV_USER_SHELL}" ]; then
     user_shell_args="-s ${DIB_DEV_USER_SHELL}"
 fi
-useradd -m ${DIB_DEV_USER_USERNAME} $user_shell_args
+id ${DIB_DEV_USER_USERNAME} || (useradd -m ${DIB_DEV_USER_USERNAME} $user_shell_args && chown -R ${DIB_DEV_USER_USERNAME}:${DIB_DEV_USER_USERNAME} /home/${DIB_DEV_USER_USERNAME})
 set +x
 if [ -n "${DIB_DEV_USER_PASSWORD}" ]; then
     echo "Setting password."
@@ -30,5 +30,3 @@ if [ -f /tmp/in_target.d/devuser-ssh-authorized-keys ]; then
     mkdir -p /home/${DIB_DEV_USER_USERNAME}/.ssh
     cp /tmp/in_target.d/devuser-ssh-authorized-keys /home/${DIB_DEV_USER_USERNAME}/.ssh/authorized_keys
 fi
-
-chown -R ${DIB_DEV_USER_USERNAME}:${DIB_DEV_USER_USERNAME} /home/${DIB_DEV_USER_USERNAME}
